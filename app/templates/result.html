@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="/static/assets/logo.png"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<title>BookClub</title>
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+	<link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="../static/result.css">
+</head>
+<body>
+    <div id="pageDisplay">
+        <h1>Here's what you should read next!</h1>
+        <div id="bookDisplay">
+        </div>
+        <div id="centerButton">
+            <button id="showMore">Show More</button>
+        </div> 
+    </div>
+
+    <script>
+        const NUM_RESULTS = 15;
+
+        const gen_inspect_page = (book) => {
+            const book_inspect_bg = $("<div class=\"book-inspect-bg\">");
+            const book_inspect = $("<div class=\"book-inspect\">");
+            var close_button = $("<button type=\"button\" class=\"book-inspect-close\">X</button>");
+            $(close_button).click(() => {
+                $(book_inspect_bg).hide();
+            });
+            book_inspect.append(close_button);
+            var img = $("<img class=\"book-cover\"src=\"" + book.image_url + "\">");
+            book_inspect.append(img);
+            var title = $("<h2 class=\"book-title\">");
+            title.append(book.title);
+            book_inspect.append(title);
+            var author = $("<h3 class=\"book-author\">");
+            author.append(book.author ? book.author : "Author Not Found");
+            book_inspect.append(author);
+            var sumTitle = $("<h3 class=\"book-summary-heading\">Summary</h3>");
+            var summary = $("<div class=\"book-summary\">");
+            summary.append(sumTitle);
+            summary.append(book.description);
+            book_inspect.append(summary);
+            var seemore = $("<a class=\"book-link\" href=\"" + book.book_url + "\">See more on Goodreads</a>");
+            book_inspect.append(seemore);
+            book_inspect_bg.append(book_inspect);
+            
+            return book_inspect_bg;
+        }
+
+        const gen_book_cards = (book_data, all_books) => {
+            for (var i = 0; i < NUM_RESULTS; i++) {
+                var book = book_data.shift();
+                console.log(book);
+                var book_display = $("<div class=\"book\">");
+                var book_ranking = $("<div class=\"book-rank\">");
+                book_ranking.append(book.ranking);
+                book_display.append(book_ranking);
+                var img = $("<img class=\"book-cover\"src=\"" + book.image_url + "\">");
+                book_display.append(img);
+                var title = $("<h2 class=\"book-title\">");
+                title.append(book.title);
+                book_display.append(title);
+                var author = $("<h3 class=\"book-author\">");
+                author.append(book.author ? book.author : "Author Not Found");
+                book_display.append(author);
+                var summary = $("<div class=\"book-summary\">");
+                summary.append(book.description);
+                book_display.append(summary);
+
+                const book_inspect = gen_inspect_page(book);
+                $(book_display).click(() => {
+                    $(book_inspect).show();
+                });
+                $("#pageDisplay").append(book_inspect);
+
+                all_books.append(book_display);
+            }
+
+            return all_books;
+        }
+
+        $(function() {
+            var data = sessionStorage.getItem("result");
+            if(data) {
+                console.log("Results found: ");
+                console.log(data);
+                var book_data = JSON.parse(data);
+                console.log(book_data);
+                var all_books = $("<div class=\"all-books\">");
+                all_books = gen_book_cards(book_data,all_books);
+                $("#bookDisplay").append(all_books);
+                
+                $("#showMore").click(() => {
+                    var add_books = gen_book_cards(book_data,all_books);
+                    $("#bookDisplay").append(add_books);
+                })
+                
+            }
+            else {
+                console.log("No results found!");
+                console.log(data);
+            }
+        });
+    </script>
+</body>
+</html>
