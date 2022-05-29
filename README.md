@@ -24,5 +24,8 @@ Book-Recommendation-Engine is basic recommendation Engine works on users choice 
 -Now change directory where manage.py is present in terminal and write command : flask run
 
 
+#Goodreads dataset by UCSD: https://sites.google.com/eng.ucsd.edu/ucsdbookgraph/home?authuser=0
+
+
    
 
