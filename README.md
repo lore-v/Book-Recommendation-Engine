@@ -26,6 +26,9 @@ Book-Recommendation-Engine is basic recommendation Engine works on users choice 
 
 #Goodreads dataset by UCSD: https://sites.google.com/eng.ucsd.edu/ucsdbookgraph/home?authuser=0
 
+#Download this file in data folder 
+https://drive.google.com/file/d/1_fcaTVyETiSnIQjQKIDDv0bO807UsfuB/view?usp=sharing
+
 
    
 
